@@ -13,17 +13,24 @@ const app = express();
 // Security headers
 app.use(helmet());
 
-// CORS
+// CORS — must not pass Error to callback (causes 500 on OPTIONS preflight)
+const allowedOrigins = config.corsOrigin;
+
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin || config.corsOrigin.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error(`CORS blocked for origin: ${origin}`));
+      if (!origin) {
+        return callback(null, true);
       }
+      const normalized = origin.replace(/\/$/, '');
+      if (allowedOrigins.includes(normalized)) {
+        return callback(null, true);
+      }
+      callback(null, false);
     },
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
   })
 );
 
