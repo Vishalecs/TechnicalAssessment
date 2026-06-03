@@ -1,39 +1,44 @@
 import { NavLink } from 'react-router-dom';
+import { IconDashboard, IconProducts, IconCustomers, IconOrders } from './Icons';
 
 const navItems = [
-  { to: '/', label: 'Dashboard', icon: '📊' },
-  { to: '/products', label: 'Products', icon: '📦' },
-  { to: '/customers', label: 'Customers', icon: '👥' },
-  { to: '/orders', label: 'Orders', icon: '🛒' },
+  { to: '/', label: 'Dashboard', Icon: IconDashboard },
+  { to: '/products', label: 'Products', Icon: IconProducts },
+  { to: '/customers', label: 'Customers', Icon: IconCustomers },
+  { to: '/orders', label: 'Orders', Icon: IconOrders },
 ];
 
 const Sidebar = ({ isOpen, onClose }) => {
   return (
     <aside className={`sidebar ${isOpen ? 'sidebar-open' : ''}`}>
       <div className="sidebar-brand">
-        <span className="brand-icon">IM</span>
+        <span className="brand-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5z" />
+            <path d="M2 17l10 5 10-5" />
+            <path d="M2 12l10 5 10-5" />
+          </svg>
+        </span>
         <div>
           <h2>Inventory</h2>
           <p>Management System</p>
         </div>
       </div>
       <nav className="sidebar-nav">
-        {navItems.map((item) => (
+        <p className="nav-section-label">Main Menu</p>
+        {navItems.map(({ to, label, Icon }) => (
           <NavLink
-            key={item.to}
-            to={item.to}
-            end={item.to === '/'}
+            key={to}
+            to={to}
+            end={to === '/'}
             className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
             onClick={onClose}
           >
-            <span className="nav-icon">{item.icon}</span>
-            {item.label}
+            <span className="nav-icon"><Icon /></span>
+            {label}
           </NavLink>
         ))}
       </nav>
-      <div className="sidebar-footer">
-        <p>v1.0.0</p>
-      </div>
     </aside>
   );
 };
